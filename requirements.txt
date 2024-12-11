@@ -1,0 +1,22 @@
+# General
+torch
+torchaudio_augmentations==0.2.1 
+numpy
+pandas
+scikit-learn
+matplotlib
+omegaconf
+astropy
+python-dotenv
+tqdm
+torchmetrics
+evaluate
+nnAudio
+# Preprocessing Data
+librosa>=0.8
+yt-dlp
+# AnyModal
+transformers==4.46.3
+huggingface_hub
+schedulefree
+peft
