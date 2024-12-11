@@ -1,0 +1,66 @@
+task: audio-cap # audio-cap or audio-qa
+
+dataset:
+  annotation_path: lpmc
+  data_dir: data/musiccaps
+  inflate: true
+
+model:
+  audio_model_id: m-a-p/MERT-v1-95M
+  llm_model_id: HuggingFaceTB/SmolLM2-135M-Instruct
+  llm_generate_params:  
+    max_new_tokens: 50
+    temperature: 0.7
+    top_p: 0.9
+    do_sample: true
+    repetition_penalty: 1.5
+    num_beams: 5
+  # For SmolLM2, you can include a system prompt before start token to give model some overall context
+  llm_system_prompt: You are a professional musician who is an expert in describing music. You are given a short audio excerpt from a song. Please describe the music you hear from the audio. 
+  audio_model_params:
+    use_weighted_avg: true # use weighted average of each transformer block output
+  projector_params:
+    dropout: 0.1
+    num_hidden: 1
+
+train:
+  # hyperparams
+  epochs: 5
+  batch_size: 2
+  # optimizer
+  lr_sched: linear_warmup_cosine_lr
+  init_lr: 1e-4
+  min_lr: 8e-5
+  learning_rate: 1e-4
+  warmup_lr: 1e-6 
+  warmup_start_lr: -1 # optional (-1 if not)
+  weight_decay: 0.05
+  warmup_steps: 1000 # optional (0 if not)
+  iters_per_epoch: 1000 # optional (null if not)
+  decay_rate: null # optional (null if not)
+  # validation
+  do_val: false # if false, will train on both train + val data
+  val_freq: 1
+  val_subset_size: 1000
+  num_print_samples: 5
+  # general
+  use_peft: false # don't use, disabled for now due to forced freezing
+  precision: fp16 # for mixed-precision training (choices: fp16, bf16, null)
+  model_save_freq: 1
+  model_save_path: checkpoints/mert-v1-95m_smollm2-135m-instruct_pretrain1_lpmc
+  checkpoint_path: null
+
+eval:
+  metrics: ["bleu-avg-1-to-4", "meteor", "bertscore"]
+  checkpoint_path: checkpoints/mert-v1-95m_smollm2-135m-instruct_pretrain1_lpmc/best_model.pth
+
+num_threads: 10
+random_seed: 42
+access_token: null
+gpu_ids: [0, 1] # add gpu ids here, -1 for CPU
+init_method: tcp://localhost:9999 # Initialization method, includes TCP or shared file-system"
+dist_backend: nccl # backend to use for distributed processing
+shard_id: 0 # The shard id of current node, Starts from 0 to num_shards - 1
+num_shards: 1 # Number of shards using by the job
+debug_mode: false
+

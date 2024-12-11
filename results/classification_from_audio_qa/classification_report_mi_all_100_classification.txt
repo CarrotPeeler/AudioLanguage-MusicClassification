@@ -1,0 +1,18 @@
+Classification Report
+Accuracy: 21.59%=====================
+              precision    recall  f1-score   support
+
+       blues       0.86      0.05      0.10       111
+   classical       0.73      0.20      0.31       111
+  electronic       0.35      0.14      0.20       117
+ funk / soul       0.30      0.23      0.26       111
+     hip hop       0.66      0.28      0.39       111
+        jazz       0.50      0.08      0.14       111
+       latin       0.67      0.13      0.21       111
+         pop       0.20      0.33      0.25       111
+        rock       0.43      0.51      0.47       111
+     unknown       0.00      0.00      0.00         0
+
+    accuracy                           0.22      1005
+   macro avg       0.47      0.19      0.23      1005
+weighted avg       0.52      0.22      0.26      1005
